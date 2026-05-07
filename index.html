@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Word Puzzle · For Mimi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── Design Tokens ─── */
+:root {
+  --cream:           #faf3e7;
+  --cream-2:         #f3e9d4;
+  --ink:             #3a2a1f;
+  --ink-soft:        #6b5340;
+
+  --rose:            #e8a4a4;
+  --rose-deep:       #c97070;
+  --sage:            #a8bf9a;
+  --sage-deep:       #7a9568;
+  --butter:          #f1cf6b;
+  --butter-deep:     #c99e2a;
+  --terracotta:      #d99070;
+  --terracotta-deep: #b56a48;
+
+  --tile:            #fffaf0;
+}
+
+/* ─── Reset & Base ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background:
+    radial-gradient(ellipse 800px 500px at 15% -10%, #fde8d8 0%, transparent 60%),
+    radial-gradient(ellipse 700px 600px at 95% 110%, #f5dde0 0%, transparent 55%),
+    radial-gradient(ellipse 500px 400px at 90% 20%, #e8efd9 0%, transparent 60%),
+    var(--cream);
+  min-height: 100vh;
+  color: var(--ink);
+  padding: 28px 16px 60px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── App Shell ─── */
+#app {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ─── Header ─── */
+.eyebrow {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.7em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.eyebrow .dot { color: var(--rose-deep); }
+
+.title {
+  text-align: center;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(30px, 8.5vw, 46px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.title em {
+  font-style: italic;
+  color: var(--rose-deep);
+}
+
+.subtitle {
+  text-align: center;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+/* ─── Mistakes ─── */
+.mistakes-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.mistakes-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.hearts {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.heart {
+  width: 22px;
+  height: 22px;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.heart svg { width: 100%; height: 100%; }
+.heart.lost {
+  opacity: 0.18;
+  transform: scale(0.85);
+}
+
+/* ─── Solved Banners ─── */
+#solved-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.solved-banner {
+  border-radius: 18px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 0 rgba(58,42,31,0.14), 0 8px 20px rgba(58,42,31,0.06);
+  animation: bannerIn 0.55s cubic-bezier(.2,.8,.2,1.1) forwards;
+  opacity: 0;
+}
+.solved-banner.rose     { background: linear-gradient(180deg, #f4b9b9, #e89a9a); }
+.solved-banner.sage     { background: linear-gradient(180deg, #bcd0ad, #9eb88c); }
+.solved-banner.butter   { background: linear-gradient(180deg, #f7dc88, #ebc35a); }
+.solved-banner.terracotta { background: linear-gradient(180deg, #e6a587, #d18761); }
+
+.banner-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.banner-name {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--ink);
+}
+.banner-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(58,42,31,0.12);
+  color: var(--ink);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.banner-words {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  opacity: 0.78;
+  text-transform: uppercase;
+}
+
+@keyframes bannerIn {
+  from { opacity: 0; transform: translateY(-12px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ─── Tile Grid ─── */
+#tile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.tile {
+  aspect-ratio: 1 / 1.05;
+  background: var(--tile);
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: clamp(11px, 3.6vw, 16px);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  box-shadow: 0 2px 0 rgba(58,42,31,0.12), 0 4px 14px rgba(58,42,31,0.08);
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  text-align: center;
+  line-height: 1.2;
+  position: relative;
+}
+
+@media (hover: hover) {
+  .tile:not(.selected):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0 rgba(58,42,31,0.14), 0 8px 22px rgba(58,42,31,0.12);
+  }
+}
+
+.tile.selected {
+  background: var(--ink);
+  color: var(--cream);
+  box-shadow: 0 2px 0 rgba(58,42,31,0.18), 0 6px 18px rgba(58,42,31,0.15);
+}
+
+.tile.pop {
+  animation: tilePop 0.35s ease forwards;
+}
+@keyframes tilePop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.tile.shake {
+  animation: tileShake 0.5s ease forwards;
+}
+@keyframes tileShake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-6px); }
+  30%       { transform: translateX(6px); }
+  45%       { transform: translateX(-5px); }
+  60%       { transform: translateX(5px); }
+  75%       { transform: translateX(-3px); }
+  90%       { transform: translateX(3px); }
+}
+
+.tile.jump {
+  animation: tileJump 0.35s ease forwards;
+}
+@keyframes tileJump {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+/* ─── Action Buttons ─── */
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  padding: 11px 22px;
+  cursor: pointer;
+  border: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  transition: background 0.15s, color 0.15s, opacity 0.15s, transform 0.1s;
+}
+.btn:not(:disabled):hover { background: rgba(58,42,31,0.06); }
+.btn:not(:disabled):active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.38; cursor: default; }
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--cream);
+}
+.btn-primary:not(:disabled):hover { background: #5a3e2e; }
+
+/* ─── Toast ─── */
+#toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(58,42,31,.25);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+  z-index: 1000;
+}
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ─── Victory Overlay ─── */
+#victory-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(58,42,31,0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 500;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#victory-overlay.show { opacity: 1; }
+#victory-overlay.hidden { display: none; }
+
+.victory-card {
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 0%, #fde8d8, transparent 70%),
+    radial-gradient(ellipse 70% 70% at 90% 100%, #f5dde0, transparent 65%),
+    var(--cream);
+  border-radius: 28px;
+  padding: 44px 36px 36px;
+  max-width: 560px;
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  box-shadow: 0 30px 80px rgba(58,42,31,.35), inset 0 0 0 1px rgba(58,42,31,.08);
+  position: relative;
+  transform: scale(0.92);
+  transition: transform 0.55s cubic-bezier(.2,.9,.2,1.1);
+}
+#victory-overlay.show .victory-card {
+  transform: scale(1);
+}
+
+/* ─── Confetti Hearts ─── */
+.confetti-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  pointer-events: none;
+  z-index: 1;
+}
+.confetti-heart {
+  position: absolute;
+  top: -30px;
+  font-size: 16px;
+  animation: confettiFall linear forwards;
+  opacity: 0;
+}
+@keyframes confettiFall {
+  0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(500px) rotate(360deg); }
+}
+
+/* ─── Victory Card Contents ─── */
+.victory-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.victory-eyebrow {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+}
+
+.victory-title {
+  text-align: center;
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: clamp(34px, 9vw, 54px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.victory-title em {
+  font-style: italic;
+  color: var(--rose-deep);
+}
+.victory-title em.gameover-accent {
+  color: var(--terracotta-deep);
+}
+
+.victory-note {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.victory-note em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ─── Summary Grid ─── */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.summary-pill {
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+.summary-pill.rose       { background: linear-gradient(180deg, #f4b9b9, #e89a9a); }
+.summary-pill.sage       { background: linear-gradient(180deg, #bcd0ad, #9eb88c); }
+.summary-pill.butter     { background: linear-gradient(180deg, #f7dc88, #ebc35a); }
+.summary-pill.terracotta { background: linear-gradient(180deg, #e6a587, #d18761); }
+
+.summary-name {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.summary-words {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  opacity: 0.75;
+  text-transform: uppercase;
+}
+
+/* ─── Stats Row ─── */
+.stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+.stat-item {
+  text-align: center;
+  padding: 0 20px;
+}
+.stat-value {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 28px;
+  color: var(--ink);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+.stat-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(58,42,31,0.15);
+}
+
+/* ─── Signature ─── */
+.signature {
+  text-align: center;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink-soft);
+}
+.signature em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ─── Victory Actions ─── */
+.victory-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 520px) {
+  body { padding: 16px 12px 40px; }
+  #app { gap: 14px; }
+  #tile-grid { gap: 8px; }
+  .actions { gap: 8px; }
+  .btn { flex: 1 1 auto; justify-content: center; display: flex; }
+  .victory-card { border-radius: 22px; padding: 32px 22px 26px; }
+}
+@media (max-width: 460px) {
+  .summary-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Copy Success Flash ─── */
+.btn-copy-success {
+  background: var(--sage-deep) !important;
+  border-color: var(--sage-deep) !important;
+  color: var(--cream) !important;
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- Header -->
+  <div class="eyebrow">
+    <span class="dot">·</span> For Mimi <span class="dot">·</span> Mother's Day 2026 <span class="dot">·</span>
+  </div>
+
+  <h1 class="title">A Little <em>Word Puzzle</em></h1>
+  <p class="subtitle">Find four groups of four. Made just for you, Mimi.</p>
+
+  <!-- Mistakes -->
+  <div class="mistakes-row">
+    <span class="mistakes-label">Mistakes Left</span>
+    <div class="hearts" id="hearts-container"></div>
+  </div>
+
+  <!-- Solved Banners -->
+  <div id="solved-area"></div>
+
+  <!-- Tile Grid -->
+  <div id="tile-grid"></div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="btn" id="btn-shuffle">Shuffle</button>
+    <button class="btn" id="btn-deselect" disabled>Deselect All</button>
+    <button class="btn btn-primary" id="btn-submit" disabled>Submit</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Victory / Loss Overlay -->
+<div id="victory-overlay" class="hidden">
+  <div class="victory-card">
+    <div class="confetti-layer" id="confetti-layer"></div>
+    <div class="victory-inner">
+      <div class="victory-eyebrow" id="victory-eyebrow">★ You did it ★</div>
+      <h2 class="victory-title" id="victory-title">
+        Happy <em id="victory-em">Mother's Day</em>, Mimi
+      </h2>
+      <p class="victory-note" id="victory-note"></p>
+      <div class="summary-grid" id="summary-grid"></div>
+      <div class="stats-row" id="stats-row"></div>
+      <div class="signature">with all my love, <em>Zach</em> ♡</div>
+      <div class="victory-actions">
+        <button class="btn" id="btn-replay">Play Again</button>
+        <button class="btn btn-primary" id="btn-copy">Copy Result</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─── Data ─── */
+const RECIPIENT = 'Mimi';
+const SENDER = 'Zach';
+const MAX_MISTAKES = 4;
+
+const CATEGORIES = {
+  pups: {
+    id: 'pups',
+    name: 'First Syllables of the Best Pups',
+    color: 'butter',
+    emoji: '🌼',
+    words: ['CASE', 'BAIL', 'WILL', 'TED'],
+    flavor: 'CASEY · BAILEY · WILLET · TEDDY',
+    badge: 'Pups',
+  },
+  tennis: {
+    id: 'tennis',
+    name: 'Words Associated With Tennis',
+    color: 'sage',
+    emoji: '🌿',
+    words: ['COURT', 'LOVE', 'NET', 'SERVE'],
+    flavor: 'A little nod to the court.',
+    badge: 'Tennis',
+  },
+  family: {
+    id: 'family',
+    name: 'Family',
+    color: 'rose',
+    emoji: '🌸',
+    words: ['MAMA', 'MIMI', 'DADA', 'SABA'],
+    flavor: 'The names we call the people we love.',
+    badge: 'Family',
+  },
+  rhyme: {
+    id: 'rhyme',
+    name: 'Rhyming "EE" Sound',
+    color: 'terracotta',
+    emoji: '🍂',
+    words: ['MEME', 'TEAM', 'SEEM', 'BEAM'],
+    flavor: 'They all rhyme — say them out loud.',
+    badge: 'Rhyme',
+  },
+};
+
+// Word → category lookup
+const WORD_CAT = {};
+for (const cat of Object.values(CATEGORIES)) {
+  for (const w of cat.words) WORD_CAT[w] = cat.id;
+}
+
+// Initial order — hand-tuned, do not randomize on load
+const INITIAL_ORDER = [
+  'MAMA','MEME','MIMI','CASE',
+  'BAIL','COURT','WILL','SEEM',
+  'BEAM','SERVE','TEAM','TED',
+  'DADA','NET','SABA','LOVE',
+];
+
+/* ─── State ─── */
+let state = createInitialState();
+
+function createInitialState() {
+  return {
+    order: [...INITIAL_ORDER],
+    selected: new Set(),
+    solved: [],
+    mistakes: 0,
+    startTime: Date.now(),
+    won: false,
+  };
+}
+
+/* ─── DOM Refs ─── */
+const $grid = document.getElementById('tile-grid');
+const $solvedArea = document.getElementById('solved-area');
+const $hearts = document.getElementById('hearts-container');
+const $btnShuffle = document.getElementById('btn-shuffle');
+const $btnDeselect = document.getElementById('btn-deselect');
+const $btnSubmit = document.getElementById('btn-submit');
+const $toast = document.getElementById('toast');
+const $overlay = document.getElementById('victory-overlay');
+const $confettiLayer = document.getElementById('confetti-layer');
+const $victoryEyebrow = document.getElementById('victory-eyebrow');
+const $victoryTitle = document.getElementById('victory-title');
+const $victoryEm = document.getElementById('victory-em');
+const $victoryNote = document.getElementById('victory-note');
+const $summaryGrid = document.getElementById('summary-grid');
+const $statsRow = document.getElementById('stats-row');
+const $btnReplay = document.getElementById('btn-replay');
+const $btnCopy = document.getElementById('btn-copy');
+
+/* ─── Render ─── */
+function render() {
+  renderHearts();
+  renderGrid();
+  renderButtons();
+}
+
+function renderHearts() {
+  $hearts.innerHTML = '';
+  for (let i = 0; i < MAX_MISTAKES; i++) {
+    const lost = i >= (MAX_MISTAKES - state.mistakes);
+    const div = document.createElement('div');
+    div.className = 'heart' + (lost ? ' lost' : '');
+    div.innerHTML = `<svg viewBox="0 0 24 24" fill="${lost ? '#3a2a1f' : '#c97070'}" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>`;
+    $hearts.appendChild(div);
+  }
+}
+
+function renderGrid() {
+  // Preserve tiles that already exist to avoid re-creating
+  const existing = {};
+  $grid.querySelectorAll('.tile').forEach(el => {
+    existing[el.dataset.word] = el;
+  });
+
+  // Remove tiles not in current order
+  Object.keys(existing).forEach(w => {
+    if (!state.order.includes(w)) existing[w].remove();
+  });
+
+  // Re-order / create tiles
+  state.order.forEach((word, idx) => {
+    let el = existing[word];
+    if (!el) {
+      el = document.createElement('button');
+      el.className = 'tile';
+      el.dataset.word = word;
+      el.textContent = word;
+      el.addEventListener('click', () => toggleTile(word));
+    }
+    el.classList.toggle('selected', state.selected.has(word));
+    $grid.appendChild(el);
+  });
+}
+
+function renderButtons() {
+  $btnDeselect.disabled = state.selected.size === 0;
+  $btnSubmit.disabled = state.selected.size !== 4;
+}
+
+/* ─── Actions ─── */
+function toggleTile(word) {
+  if (state.won) return;
+  if (state.selected.has(word)) {
+    state.selected.delete(word);
+  } else {
+    if (state.selected.size >= 4) return;
+    state.selected.add(word);
+    // Pop animation
+    const el = getTileEl(word);
+    if (el) {
+      el.classList.remove('pop');
+      void el.offsetWidth; // reflow
+      el.classList.add('pop');
+      el.addEventListener('animationend', () => el.classList.remove('pop'), { once: true });
+    }
+  }
+  renderGrid();
+  renderButtons();
+}
+
+function submit() {
+  if (state.selected.size !== 4 || state.won) return;
+  const words = [...state.selected];
+  const catCounts = {};
+  words.forEach(w => {
+    const c = WORD_CAT[w];
+    catCounts[c] = (catCounts[c] || 0) + 1;
+  });
+  const topCat = Object.entries(catCounts).sort((a,b) => b[1]-a[1])[0];
+
+  if (topCat[1] === 4) {
+    // Correct!
+    const catId = topCat[0];
+    const cat = CATEGORIES[catId];
+    animateJump(words, () => {
+      // Remove from order
+      state.order = state.order.filter(w => !words.includes(w));
+      state.selected.clear();
+      state.solved.push({ catId, color: cat.color, name: cat.name, words: cat.words, flavor: cat.flavor, badge: cat.badge, emoji: cat.emoji });
+      renderSolvedBanner(state.solved[state.solved.length - 1]);
+      renderGrid();
+      renderButtons();
+      if (state.solved.length === 4) {
+        setTimeout(() => openVictory(true), 600);
+      }
+    });
+  } else {
+    // Wrong
+    if (topCat[1] === 3) {
+      showToast('So close — one away!');
+    } else {
+      showToast('Not quite — try again');
+    }
+    animateShake(words, () => {
+      state.mistakes++;
+      state.selected.clear();
+      renderHearts();
+      renderGrid();
+      renderButtons();
+      if (state.mistakes >= MAX_MISTAKES) {
+        autoReveal();
+      }
+    });
+  }
+}
+
+function shuffle() {
+  if (state.won) return;
+  const arr = [...state.order];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  state.order = arr;
+  state.selected.clear();
+  renderGrid();
+  renderButtons();
+}
+
+function deselect() {
+  state.selected.clear();
+  renderGrid();
+  renderButtons();
+}
+
+/* ─── Auto-reveal on loss ─── */
+function autoReveal() {
+  state.won = true;
+  const unsolved = Object.values(CATEGORIES).filter(c =>
+    !state.solved.find(s => s.catId === c.id)
+  );
+  let delay = 0;
+  for (const cat of unsolved) {
+    setTimeout(() => {
+      state.solved.push({ catId: cat.id, color: cat.color, name: cat.name, words: cat.words, flavor: cat.flavor, badge: cat.badge, emoji: cat.emoji });
+      state.order = state.order.filter(w => !cat.words.includes(w));
+      renderSolvedBanner(state.solved[state.solved.length - 1]);
+      renderGrid();
+    }, delay);
+    delay += 500;
+  }
+  setTimeout(() => openVictory(false), delay + 600);
+}
+
+/* ─── Solved Banner ─── */
+function renderSolvedBanner(group) {
+  const div = document.createElement('div');
+  div.className = `solved-banner ${group.color}`;
+  div.innerHTML = `
+    <div class="banner-top">
+      <span class="banner-name">${group.name}</span>
+      <span class="banner-badge">${group.badge}</span>
+    </div>
+    <div class="banner-words">${group.words.join(' · ')}</div>
+  `;
+  $solvedArea.appendChild(div);
+}
+
+/* ─── Animations ─── */
+function getTileEl(word) {
+  return $grid.querySelector(`[data-word="${word}"]`);
+}
+
+function animateJump(words, cb) {
+  let done = 0;
+  words.forEach((w, i) => {
+    const el = getTileEl(w);
+    if (!el) { done++; if (done === words.length) cb(); return; }
+    setTimeout(() => {
+      el.classList.add('jump');
+      el.addEventListener('animationend', () => {
+        el.classList.remove('jump');
+        done++;
+        if (done === words.length) cb();
+      }, { once: true });
+    }, i * 80);
+  });
+}
+
+function animateShake(words, cb) {
+  let done = 0;
+  words.forEach(w => {
+    const el = getTileEl(w);
+    if (!el) { done++; if (done === words.length) cb(); return; }
+    el.classList.remove('shake');
+    void el.offsetWidth;
+    el.classList.add('shake');
+    el.addEventListener('animationend', () => {
+      el.classList.remove('shake');
+      done++;
+      if (done === words.length) cb();
+    }, { once: true });
+  });
+}
+
+/* ─── Toast ─── */
+let toastTimer = null;
+function showToast(msg) {
+  $toast.textContent = msg;
+  $toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $toast.classList.remove('show'), 1800);
+}
+
+/* ─── Victory / Loss Screen ─── */
+function openVictory(won) {
+  state.won = true;
+  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+  const mm = String(Math.floor(elapsed / 60)).padStart(1, '0');
+  const ss = String(elapsed % 60).padStart(2, '0');
+
+  // Eyebrow
+  $victoryEyebrow.textContent = won ? '★ You did it ★' : '♡ You gave it your all ♡';
+
+  // Title
+  $victoryTitle.innerHTML = won
+    ? `Happy <em>Mother's Day</em>, ${RECIPIENT}`
+    : `Happy <em class="gameover-accent">Mother's Day</em>, ${RECIPIENT}`;
+
+  // Note
+  if (won) {
+    $victoryNote.innerHTML = `Four groups of four — solved by the smartest, kindest, most wonderful mom in the world. This little puzzle is built from the words that make our family <em>us</em>: the pups, the people, and a tiny nod to your favorite sport.`;
+  } else {
+    $victoryNote.innerHTML = `Even when the puzzle wins, <em>you</em> always do too. Thank you for being the warmest, most patient and most caring ${RECIPIENT} — and for putting up with all of us (and the pups). The categories are all yours, win or lose:`;
+  }
+
+  // Summary grid
+  $summaryGrid.innerHTML = '';
+  for (const group of state.solved) {
+    const div = document.createElement('div');
+    div.className = `summary-pill ${group.color}`;
+    div.innerHTML = `
+      <div class="summary-name">${group.name}</div>
+      <div class="summary-words">${group.words.join(' · ')}</div>
+    `;
+    $summaryGrid.appendChild(div);
+  }
+
+  // Stats
+  $statsRow.innerHTML = `
+    <div class="stat-item">
+      <div class="stat-value">${state.mistakes}</div>
+      <div class="stat-label">Mistakes</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-value">${mm}:${ss}</div>
+      <div class="stat-label">Time</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-value">4</div>
+      <div class="stat-label">Groups</div>
+    </div>
+  `;
+
+  // Confetti
+  spawnConfetti();
+
+  // Show overlay
+  $overlay.classList.remove('hidden');
+  void $overlay.offsetWidth;
+  $overlay.classList.add('show');
+}
+
+function closeVictory() {
+  $overlay.classList.remove('show');
+  setTimeout(() => $overlay.classList.add('hidden'), 350);
+}
+
+/* ─── Confetti Hearts ─── */
+const CONFETTI_COLORS = ['#c97070','#e8a4a4','#7a9568','#a8bf9a','#c99e2a','#f1cf6b','#b56a48','#d99070'];
+const HEART_CHARS = ['♥','❤','♡','💗','💕'];
+
+function spawnConfetti() {
+  $confettiLayer.innerHTML = '';
+  for (let i = 0; i < 28; i++) {
+    const el = document.createElement('span');
+    el.className = 'confetti-heart';
+    el.textContent = HEART_CHARS[Math.floor(Math.random() * HEART_CHARS.length)];
+    el.style.left = `${Math.random() * 100}%`;
+    el.style.color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    el.style.fontSize = `${10 + Math.random() * 14}px`;
+    const dur = 2.4 + Math.random() * 2.2;
+    const delay = Math.random() * 1.2;
+    el.style.animationDuration = `${dur}s`;
+    el.style.animationDelay = `${delay}s`;
+    $confettiLayer.appendChild(el);
+  }
+}
+
+/* ─── Copy Result ─── */
+function copyResult() {
+  const emojiMap = { rose: '🌸', sage: '🌿', butter: '🌼', terracotta: '🍂' };
+  const lines = state.solved.map(g => `${emojiMap[g.color].repeat(4)}  (${g.color} = ${g.badge.toLowerCase()})`);
+  const text = [
+    `${RECIPIENT}'s Mother's Day Puzzle 💐`,
+    `${state.mistakes} mistake${state.mistakes !== 1 ? 's' : ''}`,
+    '',
+    ...lines,
+    '',
+    `Happy Mother's Day! ♡ — ${SENDER}`,
+  ].join('\n');
+
+  navigator.clipboard.writeText(text).then(() => {
+    $btnCopy.textContent = 'Copied!';
+    $btnCopy.classList.add('btn-copy-success');
+    setTimeout(() => {
+      $btnCopy.textContent = 'Copy Result';
+      $btnCopy.classList.remove('btn-copy-success');
+    }, 2000);
+  }).catch(() => {
+    showToast('Could not copy — try manually!');
+  });
+}
+
+/* ─── Replay ─── */
+function replay() {
+  state = createInitialState();
+  $solvedArea.innerHTML = '';
+  $confettiLayer.innerHTML = '';
+  closeVictory();
+  render();
+}
+
+/* ─── Event Listeners ─── */
+$btnShuffle.addEventListener('click', shuffle);
+$btnDeselect.addEventListener('click', deselect);
+$btnSubmit.addEventListener('click', submit);
+$btnReplay.addEventListener('click', replay);
+$btnCopy.addEventListener('click', copyResult);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') submit();
+  if (e.key === 'Escape') deselect();
+});
+
+/* ─── Init ─── */
+render();
+</script>
+</body>
+</html>
