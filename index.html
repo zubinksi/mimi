@@ -617,14 +617,14 @@ const CATEGORIES = {
     flavor: 'The names we call the people we love.',
     badge: 'Family',
   },
-  rhyme: {
-    id: 'rhyme',
-    name: 'Rhyming "EE" Sound',
+  beaches: {
+    id: 'beaches',
+    name: 'Beaches of Montauk',
     color: 'terracotta',
     emoji: '🍂',
-    words: ['MEME', 'TEAM', 'SEEM', 'BEAM'],
-    flavor: 'They all rhyme — say them out loud.',
-    badge: 'Rhyme',
+    words: ['GIN', 'NAVY', 'HITHER', 'DITCH'],
+    flavor: 'Gin · Navy · Hither Hills · Ditch Plains',
+    badge: 'Beaches',
   },
 };
 
@@ -636,9 +636,9 @@ for (const cat of Object.values(CATEGORIES)) {
 
 // Initial order — hand-tuned, do not randomize on load
 const INITIAL_ORDER = [
-  'MAMA','MEME','MIMI','CASE',
-  'BAIL','COURT','WILL','SEEM',
-  'BEAM','SERVE','TEAM','TED',
+  'MAMA','GIN','MIMI','CASE',
+  'BAIL','COURT','WILL','NAVY',
+  'HITHER','SERVE','DITCH','TED',
   'DADA','NET','SABA','LOVE',
 ];
 
@@ -909,7 +909,7 @@ function openVictory(won) {
 
   // Note
   if (won) {
-    $victoryNote.innerHTML = `Four groups of four — solved by the smartest, kindest, most wonderful mom in the world. This little puzzle is built from the words that make our family <em>us</em>: the pups, the people, and a tiny nod to your favorite sport.`;
+    $victoryNote.innerHTML = `Four groups of four — solved by the smartest, kindest, most wonderful mom in the world. This little puzzle is built from the words that make our family <em>us</em>: the pups, the people, a nod to your favorite sport, and a little piece of your favorite place.`;
   } else {
     $victoryNote.innerHTML = `Even when the puzzle wins, <em>you</em> always do too. Thank you for being the warmest, most patient and most caring ${RECIPIENT} — and for putting up with all of us (and the pups). The categories are all yours, win or lose:`;
   }
