@@ -1,11 +1,9 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
 <defs>
   <style type="text/css"><![CDATA[
-    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&display=swap');
   ]]></style>
 
-  <!-- Background gradients -->
   <radialGradient id="rg1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
     gradientTransform="translate(180,-63) scale(960,630)">
     <stop offset="0%" stop-color="#fde8d8"/>
@@ -22,13 +20,8 @@
     <stop offset="60%" stop-color="#e8efd9" stop-opacity="0"/>
   </radialGradient>
 
-  <!-- Tile drop shadow -->
   <filter id="tile-shadow" x="-8%" y="-8%" width="116%" height="130%">
     <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#3a2a1f" flood-opacity="0.10"/>
-  </filter>
-  <!-- Selected tile glow -->
-  <filter id="sel-shadow" x="-8%" y="-8%" width="116%" height="130%">
-    <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#3a2a1f" flood-opacity="0.22"/>
   </filter>
 </defs>
 
@@ -38,188 +31,122 @@
 <rect width="1200" height="630" fill="url(#rg2)"/>
 <rect width="1200" height="630" fill="url(#rg3)"/>
 
-<!-- Soft divider between halves -->
+<!-- Soft divider -->
 <line x1="590" y1="60" x2="590" y2="570" stroke="#e8d8c8" stroke-width="1" opacity="0.5"/>
 
-<!-- ── Scattered decorative hearts (left area) ── -->
-<text x="52"  y="112" font-size="38" fill="#e8a4a4" opacity="0.55">♥</text>
-<text x="505" y="82"  font-size="22" fill="#c97070" opacity="0.40">♥</text>
-<text x="78"  y="568" font-size="28" fill="#d99070" opacity="0.50">♥</text>
-<text x="472" y="598" font-size="18" fill="#a8bf9a" opacity="0.55">♥</text>
-<text x="148" y="488" font-size="16" fill="#c97070" opacity="0.30">♥</text>
-<text x="525" y="530" font-size="14" fill="#e8a4a4" opacity="0.40">♥</text>
-<text x="100" y="200" font-size="12" fill="#c99e2a" opacity="0.35">♥</text>
+<!-- ── Scattered decorative hearts ── -->
+<text x="52"  y="130" font-size="42" fill="#e8a4a4" opacity="0.55">♥</text>
+<text x="490" y="90"  font-size="26" fill="#c97070" opacity="0.40">♥</text>
+<text x="72"  y="560" font-size="30" fill="#d99070" opacity="0.50">♥</text>
+<text x="460" y="590" font-size="20" fill="#a8bf9a" opacity="0.55">♥</text>
+<text x="140" y="490" font-size="18" fill="#c97070" opacity="0.28">♥</text>
 
-<!-- ── LEFT HALF: Text content ── -->
+<!-- ── LEFT HALF: two lines of text, vertically centered ── -->
 
-<!-- Eyebrow -->
-<text x="303" y="148"
-  text-anchor="middle"
-  font-family="'Inter', Arial, sans-serif"
-  font-weight="600"
-  font-size="12"
-  letter-spacing="5"
-  fill="#6b5340">· FOR MIMI · MOTHER'S DAY 2026 ·</text>
-
-<!-- Title: "A Little" -->
-<text x="303" y="248"
+<!-- "For Mimi" -->
+<text x="303" y="270"
   text-anchor="middle"
   font-family="'Fraunces', Georgia, serif"
   font-weight="500"
-  font-size="74"
-  letter-spacing="-1.5"
-  fill="#3a2a1f">A Little</text>
+  font-size="88"
+  letter-spacing="-1"
+  fill="#3a2a1f">For Mimi</text>
 
-<!-- Title: "Word Puzzle" italic rose -->
-<text x="303" y="338"
+<!-- "with all my love, Zach ♡" -->
+<text x="303" y="390"
   text-anchor="middle"
   font-family="'Fraunces', Georgia, serif"
+  font-style="italic"
   font-weight="500"
-  font-style="italic"
-  font-size="74"
-  letter-spacing="-1.5"
-  fill="#c97070">Word Puzzle</text>
+  font-size="44"
+  fill="#6b5340">with all my love, <tspan font-weight="600" fill="#3a2a1f">Zach</tspan> ♡</text>
 
-<!-- Decorative rule -->
-<line x1="118" y1="370" x2="488" y2="370" stroke="#e8a4a4" stroke-width="1.5" opacity="0.65"/>
-
-<!-- Subtitle lines -->
-<text x="303" y="412"
-  text-anchor="middle"
-  font-family="'Fraunces', Georgia, serif"
-  font-style="italic"
-  font-size="22"
-  fill="#6b5340">Find four groups of four.</text>
-<text x="303" y="444"
-  text-anchor="middle"
-  font-family="'Fraunces', Georgia, serif"
-  font-style="italic"
-  font-size="22"
-  fill="#6b5340">Made just for you, Mimi.</text>
-
-<!-- Signature -->
-<text x="303" y="545"
-  text-anchor="middle"
-  font-family="'Fraunces', Georgia, serif"
-  font-style="italic"
-  font-size="21"
-  fill="#6b5340">with all my love, <tspan
-    font-weight="600"
-    fill="#3a2a1f">Zach</tspan> ♡</text>
-
-<!-- ── RIGHT HALF: 4×4 tile grid ── -->
+<!-- ── RIGHT HALF: 4×4 tile grid, all cream ── -->
 <!-- tileW=118  tileH=106  colStep=128  rowStep=116 -->
 <!-- Cols: 632 760 888 1016  |  Rows: 82 198 314 430 -->
-<!-- Selected (ink): MAMA(r0c0), MIMI(r0c2), DADA(r3c0), SABA(r3c2) -->
 
 <!-- ROW 0 -->
-<!-- MAMA — selected -->
-<rect x="632" y="82" width="118" height="106" rx="14" fill="#3a2a1f" filter="url(#sel-shadow)"/>
+<rect x="632" y="82" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="691" y="140" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
-  letter-spacing="2" fill="#faf3e7">MAMA</text>
+  letter-spacing="2" fill="#3a2a1f">MAMA</text>
 
-<!-- GIN -->
 <rect x="760" y="82" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="819" y="140" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
   letter-spacing="2" fill="#3a2a1f">GIN</text>
 
-<!-- MIMI — selected -->
-<rect x="888" y="82" width="118" height="106" rx="14" fill="#3a2a1f" filter="url(#sel-shadow)"/>
+<rect x="888" y="82" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="947" y="140" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
-  letter-spacing="2" fill="#faf3e7">MIMI</text>
+  letter-spacing="2" fill="#3a2a1f">MIMI</text>
 
-<!-- CASE -->
 <rect x="1016" y="82" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="1075" y="140" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
   letter-spacing="2" fill="#3a2a1f">CASE</text>
 
 <!-- ROW 1 -->
-<!-- BAIL -->
 <rect x="632" y="198" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="691" y="256" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
   letter-spacing="2" fill="#3a2a1f">BAIL</text>
 
-<!-- COURT -->
 <rect x="760" y="198" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="819" y="256" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="13"
   letter-spacing="2" fill="#3a2a1f">COURT</text>
 
-<!-- WILL -->
 <rect x="888" y="198" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="947" y="256" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
   letter-spacing="2" fill="#3a2a1f">WILL</text>
 
-<!-- NAVY -->
 <rect x="1016" y="198" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="1075" y="256" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
   letter-spacing="2" fill="#3a2a1f">NAVY</text>
 
 <!-- ROW 2 -->
-<!-- HITHER -->
 <rect x="632" y="314" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="691" y="372" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="12"
   letter-spacing="2" fill="#3a2a1f">HITHER</text>
 
-<!-- SERVE -->
 <rect x="760" y="314" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="819" y="372" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="13"
   letter-spacing="2" fill="#3a2a1f">SERVE</text>
 
-<!-- DITCH -->
 <rect x="888" y="314" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="947" y="372" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="13"
   letter-spacing="2" fill="#3a2a1f">DITCH</text>
 
-<!-- TED -->
 <rect x="1016" y="314" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="1075" y="372" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
   letter-spacing="2" fill="#3a2a1f">TED</text>
 
 <!-- ROW 3 -->
-<!-- DADA — selected -->
-<rect x="632" y="430" width="118" height="106" rx="14" fill="#3a2a1f" filter="url(#sel-shadow)"/>
+<rect x="632" y="430" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="691" y="488" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
-  letter-spacing="2" fill="#faf3e7">DADA</text>
+  letter-spacing="2" fill="#3a2a1f">DADA</text>
 
-<!-- NET -->
 <rect x="760" y="430" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="819" y="488" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
   letter-spacing="2" fill="#3a2a1f">NET</text>
 
-<!-- SABA — selected -->
-<rect x="888" y="430" width="118" height="106" rx="14" fill="#3a2a1f" filter="url(#sel-shadow)"/>
+<rect x="888" y="430" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="947" y="488" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
-  letter-spacing="2" fill="#faf3e7">SABA</text>
+  letter-spacing="2" fill="#3a2a1f">SABA</text>
 
-<!-- LOVE -->
 <rect x="1016" y="430" width="118" height="106" rx="14" fill="#fffaf0" stroke="#e8dcc8" stroke-width="1" filter="url(#tile-shadow)"/>
 <text x="1075" y="488" text-anchor="middle" dominant-baseline="middle"
   font-family="'Inter', Arial, sans-serif" font-weight="700" font-size="14"
   letter-spacing="2" fill="#3a2a1f">LOVE</text>
-
-<!-- Small label under grid -->
-<text x="871" y="572"
-  text-anchor="middle"
-  font-family="'Inter', Arial, sans-serif"
-  font-weight="600"
-  font-size="11"
-  letter-spacing="4"
-  fill="#6b5340"
-  opacity="0.6">TAP TO PLAY</text>
 
 </svg>
